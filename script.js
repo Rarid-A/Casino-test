@@ -157,126 +157,79 @@ function spinSlots() {
   spinReel(reel3, 2);
 }
 
-function playRoulette(betAmount, betType) {
-  const resultElement = document.getElementById('roulette-result');
-  const wheelNumbers = Array.from({ length: 37 }, (_, i) => i); // 0 to 36
-  const colors = wheelNumbers.map((num) => (num === 0 ? 'green' : num % 2 === 0 ? 'black' : 'red'));
-
-  if (accounts[currentUser].money < betAmount) {
-    resultElement.textContent = 'Not enough gold to place this bet!';
-    return;
-  }
-
-  accounts[currentUser].money -= betAmount; // Deduct bet amount
-  updateBalanceDisplay();
-
-  const spinResult = Math.floor(Math.random() * 37); // Random number between 0 and 36
-  const spinColor = colors[spinResult];
-
-  let winnings = 0;
-
-  // Determine winnings based on bet type
-  if (betType === 'red' && spinColor === 'red') {
-    winnings = betAmount * 2;
-  } else if (betType === 'black' && spinColor === 'black') {
-    winnings = betAmount * 2;
-  } else if (betType === 'green' && spinColor === 'green') {
-    winnings = betAmount * 14;
-  } else if (!isNaN(betType) && parseInt(betType) === spinResult) {
-    winnings = betAmount * 36;
-  }
-
-  if (winnings > 0) {
-    accounts[currentUser].money += winnings;
-    resultElement.textContent = `🎉 The ball landed on ${spinResult} (${spinColor}). You win ${winnings} Gold! 🎉`;
-  } else {
-    resultElement.textContent = `The ball landed on ${spinResult} (${spinColor}). You lose!`;
-  }
-
-  updateBalanceDisplay();
-}
-
-// Generate the roulette wheel
-function createRouletteWheel() {
-  const wheel = document.getElementById('roulette-wheel');
+// Generate the roulette board
+function createRouletteBoard() {
+  const board = document.getElementById('roulette-board');
   const numbers = [
     { number: 0, color: 'green' },
-    { number: 32, color: 'red' },
-    { number: 15, color: 'black' },
-    { number: 19, color: 'red' },
-    { number: 4, color: 'black' },
-    { number: 21, color: 'red' },
-    { number: 2, color: 'black' },
-    { number: 25, color: 'red' },
-    { number: 17, color: 'black' },
-    { number: 34, color: 'red' },
-    { number: 6, color: 'black' },
-    { number: 27, color: 'red' },
-    { number: 13, color: 'black' },
-    { number: 36, color: 'red' },
-    { number: 11, color: 'black' },
-    { number: 30, color: 'red' },
-    { number: 8, color: 'black' },
-    { number: 23, color: 'red' },
-    { number: 10, color: 'black' },
-    { number: 5, color: 'red' },
-    { number: 24, color: 'black' },
-    { number: 16, color: 'red' },
-    { number: 33, color: 'black' },
     { number: 1, color: 'red' },
-    { number: 20, color: 'black' },
-    { number: 14, color: 'red' },
-    { number: 31, color: 'black' },
-    { number: 9, color: 'red' },
-    { number: 22, color: 'black' },
-    { number: 18, color: 'red' },
-    { number: 29, color: 'black' },
-    { number: 7, color: 'red' },
-    { number: 28, color: 'black' },
-    { number: 12, color: 'red' },
-    { number: 35, color: 'black' },
+    { number: 2, color: 'black' },
     { number: 3, color: 'red' },
+    { number: 4, color: 'black' },
+    { number: 5, color: 'red' },
+    { number: 6, color: 'black' },
+    { number: 7, color: 'red' },
+    { number: 8, color: 'black' },
+    { number: 9, color: 'red' },
+    { number: 10, color: 'black' },
+    { number: 11, color: 'black' },
+    { number: 12, color: 'red' },
+    { number: 13, color: 'black' },
+    { number: 14, color: 'red' },
+    { number: 15, color: 'black' },
+    { number: 16, color: 'red' },
+    { number: 17, color: 'black' },
+    { number: 18, color: 'red' },
+    { number: 19, color: 'red' },
+    { number: 20, color: 'black' },
+    { number: 21, color: 'red' },
+    { number: 22, color: 'black' },
+    { number: 23, color: 'red' },
+    { number: 24, color: 'black' },
+    { number: 25, color: 'red' },
     { number: 26, color: 'black' },
+    { number: 27, color: 'red' },
+    { number: 28, color: 'black' },
+    { number: 29, color: 'black' },
+    { number: 30, color: 'red' },
+    { number: 31, color: 'black' },
+    { number: 32, color: 'red' },
+    { number: 33, color: 'black' },
+    { number: 34, color: 'red' },
   ];
 
-  const wheelSize = 300;
-  const segmentAngle = 360 / numbers.length;
-
-  wheel.style.position = 'relative';
-  wheel.style.width = `${wheelSize}px`;
-  wheel.style.height = `${wheelSize}px`;
-  wheel.style.borderRadius = '50%';
-  wheel.style.border = '5px solid white';
-  wheel.style.overflow = 'hidden';
-
-  numbers.forEach((item, index) => {
-    const segment = document.createElement('div');
-    segment.style.position = 'absolute';
-    segment.style.width = '50%';
-    segment.style.height = '50%';
-    segment.style.backgroundColor = item.color;
-    segment.style.clipPath = 'polygon(100% 0, 100% 100%, 0 100%)';
-    segment.style.transformOrigin = '100% 100%';
-    segment.style.transform = `rotate(${index * segmentAngle}deg)`;
-    segment.style.color = 'white';
-    segment.style.textAlign = 'center';
-    segment.style.fontSize = '12px';
-    segment.style.lineHeight = `${wheelSize / 2}px`;
-
-    const text = document.createElement('div');
-    text.textContent = item.number;
-    text.style.transform = `rotate(-${index * segmentAngle}deg)`;
-    segment.appendChild(text);
-
-    wheel.appendChild(segment);
+  numbers.forEach((item) => {
+    const cell = document.createElement('div');
+    cell.textContent = item.number;
+    cell.style.width = '50px';
+    cell.style.height = '50px';
+    cell.style.display = 'flex';
+    cell.style.alignItems = 'center';
+    cell.style.justifyContent = 'center';
+    cell.style.backgroundColor = item.color;
+    cell.style.color = 'white';
+    cell.style.margin = '2px';
+    cell.style.borderRadius = '5px';
+    board.appendChild(cell);
   });
 }
 
-// Spin the roulette wheel
-function spinRouletteWheel() {
-  const wheel = document.getElementById('roulette-wheel');
-  const spinResult = Math.floor(Math.random() * 37); // Random number between 0 and 36
-  const spinDegrees = 360 * 5 + (360 / 37) * spinResult; // 5 full rotations + result position
+// Handle roulette spin
+function placeRouletteBet(event) {
+  event.preventDefault();
+
+  const betType = document.getElementById('bet-type').value;
+  const resultElement = document.getElementById('roulette-result');
+
+  if (accounts[currentUser].money < 10) {
+    resultElement.textContent = 'Not enough gold to place a bet!';
+    return;
+  }
+
+  accounts[currentUser].money -= 10; // Deduct bet amount
+  updateBalanceDisplay();
+
+  const spinResult = Math.floor(Math.random() * 35); // Random number between 0 and 34
   const colors = [
     'green',
     'red',
@@ -289,6 +242,14 @@ function spinRouletteWheel() {
     'black',
     'red',
     'black',
+    'black',
+    'red',
+    'black',
+    'red',
+    'black',
+    'red',
+    'black',
+    'red',
     'red',
     'black',
     'red',
@@ -299,58 +260,27 @@ function spinRouletteWheel() {
     'black',
     'red',
     'black',
-    'red',
     'black',
     'red',
     'black',
     'red',
     'black',
     'red',
-    'black',
-    'red',
-    'black',
-    'red',
-    'black',
-    'red',
-    'black',
   ];
 
-  wheel.style.transition = 'transform 4s ease-out';
-  wheel.style.transform = `rotate(${spinDegrees}deg)`;
+  const spinColor = colors[spinResult];
+  let winnings = 0;
 
-  setTimeout(() => {
-    const resultColor = colors[spinResult];
-    const resultElement = document.getElementById('roulette-result');
-    resultElement.textContent = `The ball landed on ${spinResult} (${resultColor}).`;
-  }, 4000); // Wait for the spin animation to complete
-}
-
-// Initialize the roulette wheel on page load
-document.addEventListener('DOMContentLoaded', createRouletteWheel);
-
-document.getElementById('bet-type').addEventListener('change', (event) => {
-  const specificNumberInput = document.getElementById('specific-number');
-  if (event.target.value === 'number') {
-    specificNumberInput.style.display = 'inline-block';
+  if (betType === spinColor) {
+    winnings = betType === 'green' ? 140 : 20; // Green pays 14:1, others pay 2:1
+    accounts[currentUser].money += winnings;
+    resultElement.textContent = `🎉 The ball landed on ${spinResult} (${spinColor}). You win ${winnings} Gold! 🎉`;
   } else {
-    specificNumberInput.style.display = 'none';
-  }
-});
-
-function placeRouletteBet() {
-  const betAmount = parseInt(document.getElementById('bet-amount').value);
-  const betType = document.getElementById('bet-type').value;
-  const specificNumber = parseInt(document.getElementById('specific-number').value);
-
-  if (isNaN(betAmount) || betAmount <= 0) {
-    alert('Please enter a valid bet amount.');
-    return;
+    resultElement.textContent = `The ball landed on ${spinResult} (${spinColor}). You lose!`;
   }
 
-  if (betType === 'number' && (isNaN(specificNumber) || specificNumber < 0 || specificNumber > 36)) {
-    alert('Please enter a valid number between 0 and 36.');
-    return;
-  }
-
-  playRoulette(betAmount, betType === 'number' ? specificNumber : betType);
+  updateBalanceDisplay();
 }
+
+// Initialize the roulette board on page load
+document.addEventListener('DOMContentLoaded', createRouletteBoard);

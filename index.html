@@ -84,7 +84,20 @@
 
     <div id="roulette" class="tabcontent">
       <h2>Roulette Game</h2>
-      <p>This is where you can play Roulette.</p>
+      <p>Place your bet and spin the wheel!</p>
+      <div id="roulette-board" style="display: flex; flex-wrap: wrap; width: 300px; margin: 0 auto;">
+        <!-- Roulette cells will be dynamically generated -->
+      </div>
+      <form onsubmit="return placeRouletteBet(event)" style="text-align: center; margin-top: 20px;">
+        <label for="bet-type">Choose your bet:</label>
+        <select id="bet-type" required>
+          <option value="red">Red</option>
+          <option value="black">Black</option>
+          <option value="green">Green</option>
+        </select>
+        <button type="submit">Spin</button>
+      </form>
+      <p id="roulette-result" style="text-align: center; margin-top: 20px;"></p>
     </div>
   </div>
 

@@ -98,49 +98,17 @@ header {
   font-size: 20px;
 }
 
-#roulette {
+#roulette-board div {
+  font-size: 14px;
+  font-weight: bold;
   text-align: center;
 }
 
-#roulette input,
-#roulette select {
-  margin: 10px;
-  padding: 5px;
-  border-radius: 5px;
-  border: none;
-}
 
-#roulette button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #444;
-  color: white;
-}
 
-#roulette button:hover {
-  background-color: #555;
-}
 
-#roulette-wheel {
-  position: relative;
-  margin: 0 auto;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  border: 5px solid white;
-  overflow: hidden;
-}
 
-#roulette-pointer {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 20px solid white;
-}
+
+
+
+
