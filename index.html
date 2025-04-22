@@ -11,19 +11,81 @@
     <h1>Rarid's Casino</h1>
   </header>
 
-  <div class="tabs">
-    <button class="tablink active" onclick="openTab(event, 'slots')">Slots</button>
-    <button class="tablink" onclick="openTab(event, 'roulette')">Roulette</button>
+  <!-- Login Form -->
+  <div id="login" class="tabcontent" style="display:block; text-align: center;">
+    <h2>Login</h2>
+    <p>Please log in to access the casino.</p>
+    <form onsubmit="return login(event)">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p id="login-error" style="color: red; display: none;">Invalid username or password.</p>
+    <button onclick="openCreateAccountPopup()">Create New Account</button>
   </div>
 
-  <div id="slots" class="tabcontent" style="display:block">
-    <h2>Slots Game</h2>
-    <p>This is where you can play Slots.</p>
+  <!-- Account Creation Popup -->
+  <div id="create-account-popup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:#333; padding:20px; border-radius:10px; text-align:center; z-index:1000;">
+    <h2>Create Account</h2>
+    <form onsubmit="return createAccount(event)">
+      <input type="text" id="new-username" placeholder="Username (3-15 chars)" required />
+      <input type="password" id="new-password" placeholder="Password (3-15 chars)" required />
+      <button type="submit">Create</button>
+      <button type="button" onclick="closeCreateAccountPopup()">Cancel</button>
+    </form>
+    <p id="create-account-error" style="color: red; display: none;">Invalid input. Please follow the rules.</p>
   </div>
 
-  <div id="roulette" class="tabcontent">
-    <h2>Roulette Game</h2>
-    <p>This is where you can play Roulette.</p>
+  <!-- Casino Content -->
+  <div id="casino-content" style="display:none;">
+    <div class="tabs">
+      <button class="tablink active" onclick="openTab(event, 'slots')">Slots</button>
+      <button class="tablink" onclick="openTab(event, 'roulette')">Roulette</button>
+    </div>
+
+    <p id="balance" style="text-align: center; font-size: 18px;">Balance: 0 Gold</p>
+
+    <div id="slots" class="tabcontent" style="display:block">
+      <h2>Slots Game</h2>
+      <table style="margin: 0 auto; text-align: center; border-collapse: collapse; color: white;">
+        <tr>
+          <th>Symbol</th>
+          <th>Jackpot</th>
+        </tr>
+        <tr>
+          <td>🍒</td>
+          <td>50 Gold</td>
+        </tr>
+        <tr>
+          <td>🍋</td>
+          <td>100 Gold</td>
+        </tr>
+        <tr>
+          <td>🍊</td>
+          <td>200 Gold</td>
+        </tr>
+        <tr>
+          <td>⭐</td>
+          <td>500 Gold</td>
+        </tr>
+        <tr>
+          <td>💎</td>
+          <td>1000 Gold</td>
+        </tr>
+      </table>
+      <div id="slot-machine">
+        <div class="reel" id="reel1">🍒</div>
+        <div class="reel" id="reel2">🍒</div>
+        <div class="reel" id="reel3">🍒</div>
+      </div>
+      <button onclick="spinSlots()">Spin</button>
+      <p id="slot-result"></p>
+    </div>
+
+    <div id="roulette" class="tabcontent">
+      <h2>Roulette Game</h2>
+      <p>This is where you can play Roulette.</p>
+    </div>
   </div>
 
   <script src="script.js"></script>
