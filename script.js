@@ -5,6 +5,54 @@ const accounts = {
 
 let currentUser = null;
 
+// Utility functions for cookies
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [key, value] = cookie.trim().split('=');
+    if (key === name) return value;
+  }
+  return null;
+}
+
+function deleteCookie(name) {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+}
+
+// Show cookie banner if no decision has been made
+function showCookieBanner() {
+  if (!getCookie('cookiesAccepted')) {
+    document.getElementById('cookie-banner').style.display = 'block';
+  }
+}
+
+function acceptCookies() {
+  setCookie('cookiesAccepted', 'true', 365);
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+
+function declineCookies() {
+  setCookie('cookiesAccepted', 'false', 365);
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+
+// Remember login state
+function checkLoginState() {
+  const savedUser = getCookie('currentUser');
+  if (savedUser && accounts[savedUser]) {
+    currentUser = savedUser;
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('casino-content').style.display = 'block';
+    updateBalanceDisplay();
+  }
+}
+
 function login(event) {
   event.preventDefault();
 
@@ -13,6 +61,9 @@ function login(event) {
 
   if (accounts[username] && accounts[username].password === password) {
     currentUser = username;
+    if (getCookie('cookiesAccepted') === 'true') {
+      setCookie('currentUser', username, 7); // Save login for 7 days
+    }
     document.getElementById('login').style.display = 'none';
     document.getElementById('casino-content').style.display = 'block';
     updateBalanceDisplay();
@@ -21,6 +72,13 @@ function login(event) {
     errorElement.style.display = 'block';
     setTimeout(() => (errorElement.style.display = 'none'), 3000);
   }
+}
+
+function logout() {
+  currentUser = null;
+  deleteCookie('currentUser');
+  document.getElementById('casino-content').style.display = 'none';
+  document.getElementById('login').style.display = 'block';
 }
 
 function openCreateAccountPopup() {
@@ -324,3 +382,9 @@ function placeRouletteBet(event) {
 
 // Initialize the roulette board on page load
 document.addEventListener('DOMContentLoaded', createRouletteBoard);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  showCookieBanner();
+  checkLoginState();
+});
