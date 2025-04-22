@@ -271,15 +271,55 @@ function placeRouletteBet(event) {
   const spinColor = colors[spinResult];
   let winnings = 0;
 
-  if (betType === spinColor) {
-    winnings = betType === 'green' ? 140 : 20; // Green pays 14:1, others pay 2:1
-    accounts[currentUser].money += winnings;
-    resultElement.textContent = `🎉 The ball landed on ${spinResult} (${spinColor}). You win ${winnings} Gold! 🎉`;
-  } else {
-    resultElement.textContent = `The ball landed on ${spinResult} (${spinColor}). You lose!`;
-  }
+  // Add animation
+  const board = document.getElementById('roulette-board');
+  const cells = board.children;
+  let currentIndex = 0;
+  const spinDuration = 3000; // 3 seconds
+  const intervalTime = 50; // Time between cell highlights
 
-  updateBalanceDisplay();
+  // Clear all previous highlights
+  Array.from(cells).forEach((cell) => {
+    cell.style.border = 'none';
+  });
+
+  const interval = setInterval(() => {
+    // Remove highlight from the previous cell
+    if (currentIndex > 0) {
+      cells[(currentIndex - 1) % cells.length].style.border = 'none';
+    } else {
+      cells[cells.length - 1].style.border = 'none';
+    }
+
+    // Highlight the current cell
+    cells[currentIndex % cells.length].style.border = '2px solid yellow';
+
+    currentIndex++;
+  }, intervalTime);
+
+  // Stop the animation after the spin duration
+  setTimeout(() => {
+    clearInterval(interval);
+
+    // Clear all highlights again to ensure no lingering borders
+    Array.from(cells).forEach((cell) => {
+      cell.style.border = 'none';
+    });
+
+    // Highlight the final result
+    cells[spinResult].style.border = '4px solid gold';
+
+    // Determine winnings
+    if (betType === spinColor) {
+      winnings = betType === 'green' ? 140 : 20; // Green pays 14:1, others pay 2:1
+      accounts[currentUser].money += winnings;
+      resultElement.textContent = `🎉 The ball landed on ${spinResult} (${spinColor}). You win ${winnings} Gold! 🎉`;
+    } else {
+      resultElement.textContent = `The ball landed on ${spinResult} (${spinColor}). You lose!`;
+    }
+
+    updateBalanceDisplay();
+  }, spinDuration);
 }
 
 // Initialize the roulette board on page load

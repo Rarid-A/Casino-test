@@ -102,6 +102,7 @@ header {
   font-size: 14px;
   font-weight: bold;
   text-align: center;
+  transition: border 0.2s ease;
 }
 
 
