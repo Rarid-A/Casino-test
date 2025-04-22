@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rarid's Casino</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Rarid's Casino</h1>
+  </header>
+
+  <div class="tabs">
+    <button class="tablink active" onclick="openTab(event, 'slots')">Slots</button>
+    <button class="tablink" onclick="openTab(event, 'roulette')">Roulette</button>
+  </div>
+
+  <div id="slots" class="tabcontent" style="display:block">
+    <h2>Slots Game</h2>
+    <p>This is where you can play Slots.</p>
+  </div>
+
+  <div id="roulette" class="tabcontent">
+    <h2>Roulette Game</h2>
+    <p>This is where you can play Roulette.</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
