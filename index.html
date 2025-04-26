@@ -47,6 +47,7 @@
     <div class="tabs">
       <button class="tablink active" onclick="openTab(event, 'slots')">Slots</button>
       <button class="tablink" onclick="openTab(event, 'roulette')">Roulette</button>
+      <button class="tablink" onclick="openTab(event, 'blackjack')">Blackjack</button>
     </div>
 
     <p id="balance" style="text-align: center; font-size: 18px;">Balance: 0 Gold</p>
@@ -105,9 +106,23 @@
       </form>
       <p id="roulette-result" style="text-align: center; margin-top: 20px;"></p>
     </div>
+
+    <div id="blackjack" class="tabcontent" style="display:none;">
+      <h2>Blackjack Game</h2>
+      <p>Try your luck at Blackjack!</p>
+      <div id="bet-section">
+        <label for="bet-input">Enter your bet (minimum 10 Gold):</label>
+        <input type="number" id="bet-input" min="10" step="1" value="10">
+        <button onclick="startBlackjack()">Start Game</button>
+      </div>
+      <div id="blackjack-table"></div>
+      <div id="blackjack-result"></div>
+    </div>
+
     <button onclick="logout()" style="display:block; margin:20px auto; padding:10px 20px;">Logout</button>
   </div>
 
   <script src="script.js"></script>
+  <script src="blackjack.js"></script>
 </body>
 </html>

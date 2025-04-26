@@ -105,6 +105,82 @@ header {
   transition: border 0.2s ease;
 }
 
+#blackjack-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.blackjack-row {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.blackjack-hand {
+  text-align: center;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card {
+  width: 60px;
+  height: 90px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+}
+
+.card.hearts,
+.card.diamonds {
+  background-color: #e63946;
+}
+
+.card.clubs,
+.card.spades {
+  background-color: #1d3557;
+}
+
+.card.back {
+  background-color: #444;
+}
+
+.blackjack-actions {
+  margin-top: 20px;
+}
+
+.blackjack-actions button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+}
+
+.blackjack-actions button:hover {
+  background-color: #777;
+}
+
+.blackjack-end {
+  text-align: center;
+  margin-top: 20px;
+}
+
 
 
 
