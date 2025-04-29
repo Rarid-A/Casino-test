@@ -4,6 +4,7 @@ let dealerHand = [];
 let deck = [];
 let betAmount = 0;
 let gameOver = false; // Track if the game is over
+let isPlayerStanding = false; // Track if the player has chosen to stand
 
 // Function to initialize a new game
 function startBlackjack() {
@@ -35,6 +36,7 @@ function startBlackjack() {
   dealerHand.push(drawCard());
 
   gameOver = false; // Reset game over state
+  isPlayerStanding = false; // Reset player standing state
   updateBlackjackTable();
   checkGameStatus();
 }
@@ -96,14 +98,16 @@ function updateBlackjackTable() {
   const playerScore = calculateScore(playerHand);
   const dealerScore = calculateScore(dealerHand);
 
+  const hideDealerCard = !gameOver && !isPlayerStanding; // Hide dealer's first card unless game is over or player stands
+
   playerTable.innerHTML = `
     <div class="blackjack-row">
       <div class="blackjack-hand">
         <h3>Dealer's Hand</h3>
         <div class="cards">
-          ${formatHand(dealerHand, true)}
+          ${formatHand(dealerHand, hideDealerCard)}
         </div>
-        <p>Score: ${dealerScore}</p>
+        <p>Score: ${hideDealerCard ? '?' : dealerScore}</p>
       </div>
     </div>
     <div class="blackjack-row">
@@ -153,6 +157,7 @@ function hit() {
 function stand() {
   if (gameOver) return;
 
+  isPlayerStanding = true; // Player has chosen to stand
   while (calculateScore(dealerHand) < 17) {
     dealerHand.push(drawCard());
   }
