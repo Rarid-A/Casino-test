@@ -1,204 +1,82 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
   background-color: #222;
   color: #fff;
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 header {
-  background-color: #1e1e1e;
+  background-color: #444;
   padding: 20px;
-  text-align: center;
-  font-size: 24px;
-  border-bottom: 2px solid #444;
 }
 
-.tabs {
-  overflow: hidden;
-  background-color: #333;
+main {
+  padding: 20px;
+}
+
+#game-info p {
+  margin: 10px 0;
+}
+
+#dice-area {
   display: flex;
   justify-content: center;
-}
-
-.tablink {
-  background-color: #333;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 20px;
-  transition: background-color 0.3s;
-  color: white;
-  font-size: 16px;
-}
-
-.tablink:hover {
-  background-color: #555;
-}
-
-.tablink.active {
-  background-color: #777;
-}
-
-.tabcontent {
-  padding: 20px;
-  display: none;
-}
-
-#login button {
-  margin-top: 10px;
-}
-
-#create-account-popup {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-#create-account-popup input {
-  display: block;
-  margin: 10px auto;
-  padding: 10px;
-  width: 80%;
-  border: none;
-  border-radius: 5px;
-}
-
-#create-account-popup button {
-  margin: 5px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-#create-account-popup button:hover {
-  background-color: #555;
-}
-
-#slot-machine {
-  display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
   margin: 20px 0;
 }
 
-.reel {
-  font-size: 50px;
-  margin: 0 10px;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #444;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-#slot-result {
+.dice {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  margin: 5px;
   text-align: center;
-  margin-top: 20px;
-  font-size: 20px;
-}
-
-#roulette-board div {
-  font-size: 14px;
+  font-size: 24px;
   font-weight: bold;
-  text-align: center;
-  transition: border 0.2s ease;
-}
-
-#blackjack-table {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.blackjack-row {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.blackjack-hand {
-  text-align: center;
-}
-
-.cards {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.card {
-  width: 60px;
-  height: 90px;
+  border: 2px solid #fff;
   border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-  text-transform: uppercase;
-}
-
-.card.hearts,
-.card.diamonds {
-  background-color: #e63946;
-}
-
-.card.clubs,
-.card.spades {
-  background-color: #1d3557;
-}
-
-.card.back {
   background-color: #444;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
 }
 
-.blackjack-actions {
-  margin-top: 20px;
+.dice.selected {
+  background-color: #e63946;
+  border-color: #e63946;
 }
 
-.blackjack-actions button {
-  margin: 0 10px;
+.dice.used {
+  opacity: 0.5;
+  border: 2px dashed gray;
+}
+
+button {
   padding: 10px 20px;
+  margin: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   background-color: #555;
-  color: white;
+  color: #fff;
   font-size: 16px;
 }
 
-.blackjack-actions button:hover {
+button:disabled {
+  background-color: #333;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
   background-color: #777;
 }
 
-.blackjack-end {
-  text-align: center;
+#message {
   margin-top: 20px;
-}
-
-.dice {
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  border: 2px solid black;
-  margin: 5px;
-  cursor: pointer;
-  user-select: none;
-  color: black; /* Default text color */
-  background-color: white; /* Default background color for unkept dice */
-}
-
-.dice.kept {
-  background-color: red; /* Background color for kept dice */
+  font-size: 18px;
+  color: #e63946;
 }
 
 

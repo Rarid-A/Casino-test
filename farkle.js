@@ -1,191 +1,244 @@
-let balance = accounts[currentUser].money; // Use the account's balance
-let currentScore = 0;
+let round = 0;
+let roundScore = 0;
 let totalScore = 0;
-let rollsLeft = 3;
-let keptDice = [];
-let diceValues = [];
-let gameActive = false;
-let totalPoints = 0; // Tally for all hands
+let currentDice = [];
+let selectedDiceIndices = [];
+let usedDice = [];
+let roundRolls = 0;
 
-document.getElementById("balance").innerText = `Balance: ${balance} Gold`;
+const roundDisplay = document.getElementById("round");
+const roundScoreDisplay = document.getElementById("round-score");
+const totalScoreDisplay = document.getElementById("total-score");
+const messageDisplay = document.getElementById("message");
+const diceArea = document.getElementById("dice-area");
+const newGameButton = document.getElementById("new-game");
+const rollDiceButton = document.getElementById("roll-dice");
+const cashOutButton = document.getElementById("cash-out");
+const balanceDisplay = document.getElementById("balance"); // Update balance display
 
-function rollDice() {
-  if (!gameActive) {
-    if (balance < 10) {
-      alert("Not enough balance to play!");
-      return;
-    }
-    balance -= 10; // Deduct cost only for the first roll
-    accounts[currentUser].money = balance; // Update account balance
-    document.getElementById("balance").innerText = `Balance: ${balance} Gold`;
-    diceValues = Array(6).fill(null); // Initialize dice values
-    gameActive = true;
-  }
-
-  if (rollsLeft <= 0) {
-    alert("No rolls left! Cash out or start a new game.");
-    return;
-  }
-
-  diceValues = diceValues.map((value, index) =>
-    keptDice.includes(index) ? value : Math.floor(Math.random() * 6) + 1
-  );
-
-  rollsLeft--;
-  calculateScore(); // Recalculate the score after rolling
-  checkForWin(); // Check if the player has won
-  updateDiceDisplay();
+function updateUI() {
+  balanceDisplay.textContent = `Balance: ${accounts[currentUser].money} Gold`; // Update balance
+  roundDisplay.textContent = round;
+  roundScoreDisplay.textContent = roundScore;
+  totalScoreDisplay.textContent = totalScore;
 }
 
-function toggleDice(index) {
-  if (!gameActive || rollsLeft === 3) {
-    alert("You must roll the dice first!");
+function resetGame() {
+  round = 0;
+  roundScore = 0;
+  totalScore = 0;
+  roundRolls = 0;
+  currentDice = [];
+  selectedDiceIndices = [];
+  usedDice = [];
+  updateUI();
+  messageDisplay.textContent = "";
+  rollDiceButton.disabled = true;
+  cashOutButton.disabled = true;
+}
+
+function startNewGame() {
+  if (accounts[currentUser].money < 10) { // Check if the user has enough balance
+    messageDisplay.textContent = "Not enough gold to start a new game!";
+    return;
+  }
+  accounts[currentUser].money -= 10; // Deduct 10 gold from the user's balance
+  round = 1;
+  roundScore = 0;
+  roundRolls = 0;
+  totalScore = 0;
+  currentDice = [];
+  selectedDiceIndices = [];
+  usedDice = [];
+  updateUI();
+  messageDisplay.textContent = "Game started! Roll the dice.";
+  rollDiceButton.disabled = false;
+  cashOutButton.disabled = true;
+  rollDice();
+}
+
+function rollDice() {
+  if (selectedDiceIndices.length > 0) {
+    const selectedValues = selectedDiceIndices.map(i => currentDice[i]);
+    const score = calculateScore(selectedValues);
+    if (score === 0) {
+      messageDisplay.textContent = "Invalid dice selection!";
+      return;
+    }
+    roundScore += score;
+    usedDice.push(...selectedDiceIndices.map(i => currentDice[i]));
+  }
+
+  const diceToRoll = usedDice.length === 6 || usedDice.length === 0 ? 6 : 6 - usedDice.length;
+  currentDice = Array.from({ length: diceToRoll }, () => Math.floor(Math.random() * 6) + 1);
+  selectedDiceIndices = [];
+  renderDice();
+  const valid = getScoringIndices(currentDice);
+  if (valid.length === 0) {
+    messageDisplay.textContent = "Farkle! No scoring dice.";
+    rollDiceButton.disabled = true;
+    cashOutButton.disabled = true;
     return;
   }
 
-  if (keptDice.includes(index)) {
-    keptDice = keptDice.filter((i) => i !== index);
-  } else if (!diceValues[index]) {
-    alert("You cannot keep an unrolled dice!");
+  messageDisplay.textContent = "Select scoring dice to continue or cash out.";
+  cashOutButton.disabled = roundScore < 300;
+}
+
+function renderDice() {
+  diceArea.innerHTML = "";
+
+  // Render used dice from previous rolls
+  usedDice.forEach((value) => {
+    const diceElement = document.createElement("div");
+    diceElement.classList.add("dice", "used");
+    diceElement.textContent = value;
+    diceArea.appendChild(diceElement);
+  });
+
+  // Render current dice
+  currentDice.forEach((value, index) => {
+    const diceElement = document.createElement("div");
+    diceElement.classList.add("dice");
+    diceElement.textContent = value;
+
+    if (getScoringIndices(currentDice).includes(index)) {
+      diceElement.onclick = () => toggleDiceSelection(index);
+    } else {
+      diceElement.classList.add("disabled");
+    }
+
+    if (selectedDiceIndices.includes(index)) {
+      diceElement.classList.add("selected");
+    }
+
+    diceArea.appendChild(diceElement);
+  });
+}
+
+function toggleDiceSelection(index) {
+  if (selectedDiceIndices.includes(index)) {
+    selectedDiceIndices = selectedDiceIndices.filter(i => i !== index);
   } else {
-    keptDice.push(index);
+    selectedDiceIndices.push(index);
   }
 
-  updateDiceDisplay();
+  const selectedValues = selectedDiceIndices.map(i => currentDice[i]);
+  const score = calculateScore(selectedValues);
+
+  // Enable or disable the cash-out button based on the score
+  cashOutButton.disabled = score < 300;
+
+  renderDice();
 }
 
 function cashOut() {
-  if (!gameActive) {
-    alert("You must start a game first!");
+  const selectedValues = selectedDiceIndices.map(i => currentDice[i]);
+  const score = calculateScore(selectedValues);
+
+  if (score < 300) {
+    messageDisplay.textContent = "You need at least 300 points to cash out!";
     return;
   }
 
-  if (currentScore < 300) {
-    alert("You need at least 300 points to cash out!");
+  roundScore += score;
+  totalScore += roundScore;
+  round++;
+  roundScore = 0;
+  usedDice = [];
+  currentDice = [];
+  selectedDiceIndices = [];
+
+  if (round > 3) {
+    endGame();
     return;
   }
 
-  totalScore += currentScore;
-  totalPoints += currentScore; // Add to the total points tally
+  updateUI();
+  messageDisplay.textContent = `Points cashed out! Round ${round} begins.`;
+  rollDiceButton.disabled = false;
+  cashOutButton.disabled = true;
+  rollDice();
+}
 
-  if (totalPoints >= 1200) {
-    alert("Congratulations! You won the game and earned 50 Gold!");
-    balance += 50;
-    accounts[currentUser].money = balance; // Update account balance
-    resetGame(true); // Reset everything after winning
+function endGame() {
+  rollDiceButton.disabled = true;
+  cashOutButton.disabled = true;
+  if (totalScore >= 1500) {
+    messageDisplay.textContent = "🎉 Congratulations! You won!";
   } else {
-    alert(`You cashed out with ${currentScore} points!`);
-  }
-
-  document.getElementById("balance").innerText = `Balance: ${balance} Gold`;
-  resetGame();
-}
-
-function checkForWin() {
-  if (!gameActive) return;
-
-  if (totalPoints + currentScore >= 1200) {
-    alert("Congratulations! You instantly won the game and earned 50 Gold!");
-    balance += 50;
-    accounts[currentUser].money = balance; // Update account balance
-    document.getElementById("balance").innerText = `Balance: ${balance} Gold`;
-    resetGame(true); // Reset everything after winning
+    messageDisplay.textContent = "Game over. You didn't reach 1500 points.";
   }
 }
 
-function resetGame(fullReset = false) {
-  if (!gameActive && !fullReset) return;
+function calculateScore(diceArray) {
+  const counts = {};
+  diceArray.forEach(d => counts[d] = (counts[d] || 0) + 1);
 
-  if (currentScore < 300 && !fullReset) {
-    alert("You scored under 300 points! You lose the 10 Gold deposit.");
-    gameActive = false;
-    return;
-  }
+  const values = Object.values(counts);
+  const keys = Object.keys(counts).map(Number);
 
-  currentScore = 0;
-  rollsLeft = 3;
-  keptDice = [];
-  diceValues = Array(6).fill(null); // Reset dice values to null
-  gameActive = false;
+  // Straight
+  if (keys.length === 6) return 1500;
 
-  if (fullReset) {
-    totalScore = 0;
-    totalPoints = 0;
-  }
-
-  updateDiceDisplay(); // Ensure dice are displayed correctly
-}
-
-function updateDiceDisplay() {
-  const diceArea = document.getElementById("dice-area");
-  diceArea.innerHTML = "";
-
-  diceValues.forEach((value, index) => {
-    const dice = document.createElement("div");
-    dice.className = "dice";
-    dice.innerText = value !== null ? value : "-"; // Show "-" for unrolled dice
-    dice.style.backgroundColor = keptDice.includes(index) ? "red" : "white";
-    dice.style.color = "black";
-    dice.onclick = () => toggleDice(index);
-    diceArea.appendChild(dice);
-  });
-
-  document.getElementById("farkle-score").innerText = `Score: ${currentScore}`;
-  document.getElementById("farkle-rolls").innerText = `Rolls Left: ${rollsLeft}`;
-  document.getElementById("farkle-total").innerText = `Total Points: ${totalPoints}`;
-}
-
-function calculateScore() {
-  if (!gameActive) return;
-
-  const counts = Array(6).fill(0); // Array to count occurrences of each dice value (1-6)
-
-  diceValues.forEach((value) => {
-    if (value) counts[value - 1]++;
-  });
+  // Three Pairs
+  if (values.filter(v => v === 2).length === 3) return 1500;
 
   let score = 0;
 
-  // Check for one of each dice (1, 2, 3, 4, 5, 6)
-  if (counts.every((count) => count >= 1)) {
-    score += 750;
-    alert("You rolled one of each dice! You earned 750 points and can roll again.");
-    rollsLeft++; // Allow an extra roll
+  for (let i = 1; i <= 6; i++) {
+    let count = counts[i] || 0;
+    if (count >= 3) {
+      score += (i === 1 ? 1000 : i * 100) * (count - 2);
+      count -= 3;
+    }
+    if (i === 1 && count > 0) score += 100 * count;
+    if (i === 5 && count > 0) score += 50 * count;
   }
 
-  // Scoring for three or more of the same number
-  for (let i = 0; i < 6; i++) {
-    if (counts[i] >= 3) {
-      const baseScore = (i + 1) * 100;
-      score += baseScore; // Add base score for three of a kind
+  return score;
+}
 
-      if (counts[i] === 4) {
-        score += baseScore; // Double the 3x value for four of a kind
-      } else if (counts[i] === 5) {
-        score += baseScore * 2; // Add 3x value + 2x value for five of a kind
-      } else if (counts[i] === 6) {
-        score += baseScore * 3; // Add 3x value + 3x value for six of a kind
-      }
+function getScoringIndices(diceArray) {
+  const valid = [];
+  for (let i = 0; i < diceArray.length; i++) {
+    const testDice = [diceArray[i]];
+    if (calculateScore(testDice) > 0) valid.push(i);
+  }
 
-      counts[i] = 0; // Reset the count for this number
+  // Check for 3+ of a kind
+  const counts = {};
+  diceArray.forEach(d => counts[d] = (counts[d] || []).concat([]));
+  diceArray.forEach((d, i) => {
+    if (!counts[d]) counts[d] = [];
+    counts[d].push(i);
+  });
+
+  for (const val in counts) {
+    const indices = counts[val];
+    if (indices.length >= 3) {
+      valid.push(...indices);
     }
   }
 
-  // Scoring for individual 1s and 5s
-  score += counts[0] * 100; // Remaining 1s
-  score += counts[4] * 50;  // Remaining 5s
-
-  currentScore = score;
-
-  // Check if no scoring is possible
-  if (currentScore === 0) {
-    alert("No scoring is possible with this dice throw. You lose the 10 Gold deposit!");
-    resetGame(); // Reset the game
-    return;
+  // Check for straight or three pairs (only valid if using all dice)
+  if (diceArray.length === 6) {
+    const unique = [...new Set(diceArray)];
+    const sorted = [...unique].sort((a, b) => a - b);
+    if (sorted.join("") === "123456") {
+      return [0, 1, 2, 3, 4, 5];
+    }
+    const pairCount = Object.values(counts).filter(g => g.length === 2).length;
+    if (pairCount === 3) {
+      return [0, 1, 2, 3, 4, 5];
+    }
   }
 
-  document.getElementById("farkle-score").innerText = `Score: ${currentScore}`;
+  return [...new Set(valid)];
 }
 
-// Initialize the game UI
+newGameButton.onclick = startNewGame;
+rollDiceButton.onclick = rollDice;
+cashOutButton.onclick = cashOut;
+
 resetGame();

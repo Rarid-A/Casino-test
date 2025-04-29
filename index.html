@@ -89,22 +89,21 @@
       <div id="blackjack-result"></div>
     </div>
 
-    <div id="farkle" class="tabcontent" style="display:none;">
-      <h2>Farkle Game</h2>
-      <p>Roll the dice and try your luck!</p>
-      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div style="flex: 1; text-align: center;">
-          <div id="dice-area" style="text-align: center; margin-bottom: 20px;">
-            <!-- Dice will be displayed here -->
-          </div>
-          <div style="text-align: center; margin-bottom: 20px;">
-            <button onclick="rollDice()">Roll</button>
-            <button onclick="cashOut()">Cash Out</button>
-          </div>
-          <p id="farkle-score" style="text-align: center; font-size: 18px;">Score: 0</p>
-          <p id="farkle-rolls" style="text-align: center; font-size: 18px;">Rolls Left: 3</p>
-          <p id="farkle-total" style="text-align: center; font-size: 18px;">Total Points: 0</p>
+    <div id="farkle" class="tabcontent
+        <div id="game-info">
+          <p>Round: <span id="round">0</span> / 3</p>
+          <p>Round Score: <span id="round-score">0</span></p>
+          <p>Total Score: <span id="total-score">0</span></p>
         </div>
+        <div id="dice-area">
+          <!-- Dice will be dynamically generated here -->
+        </div>
+        <div id="game-controls">
+          <button id="new-game">New Game</button>
+          <button id="roll-dice" disabled>Roll Dice</button>
+          <button id="cash-out" disabled>Cash Out</button>
+        </div>
+        <p id="message"></p>
       </div>
     </div>
 
