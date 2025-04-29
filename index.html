@@ -89,22 +89,69 @@
   </div>
 
     <div id="farkle" class="tabcontent" style="display:none;">
-        <div id="game-info">
-          <p>Round: <span id="round">0</span> / 3</p>
-          <p>Round Score: <span id="round-score">0</span></p>
-          <p>Total Score: <span id="total-score">0</span></p>
-        </div>
-        <div id="dice-area">
-          <!-- Dice will be dynamically generated here -->
-        </div>
-        <div id="game-controls">
-          <button id="new-game">New Game</button>
-          <button id="roll-dice" disabled>Roll Dice</button>
-          <button id="cash-out" disabled>Cash Out</button>
-        </div>
-        <p id="message"></p>
-      </div>
-    </div>
+  <h2>Farkle Game</h2>
+  <div id="game-info">
+    <p>Round: <span id="round">0</span> / 3</p>
+    <p>Round Score: <span id="round-score">0</span></p>
+    <p>Total Score: <span id="total-score">0</span></p>
+  </div>
+  <div id="dice-area">
+    <!-- Dice will be dynamically generated here -->
+  </div>
+  <div id="game-controls">
+    <button id="new-game">New Game</button>
+    <button id="roll-dice" disabled>Roll Dice</button>
+    <button id="cash-out" disabled>Cash Out</button>
+  </div>
+  <p id="message"></p>
+
+  <!-- Ruleset and Point System -->
+  <div id="farkle-rules" style="margin-top: 20px; padding: 20px; background-color: #333; border-radius: 10px; color: white;">
+    <h3 style="text-align: center; text-decoration: underline;">Farkle Rules</h3>
+    <ul style="line-height: 1.8;">
+      <li>Roll six dice and score points based on specific combinations.</li>
+      <li>You must select at least one scoring die per roll to continue.</li>
+      <li>If no scoring dice are rolled, it's a "Farkle," and you lose your round score.</li>
+      <li>You can cash out your points if your round score is 300 or higher.</li>
+      <li>The game ends after 3 rounds or if you reach 1500 points.</li>
+    </ul>
+    <h3 style="text-align: center; text-decoration: underline; margin-top: 20px;">Point System</h3>
+    <table style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th style="border-bottom: 2px solid #555; padding: 10px;">Combination</th>
+          <th style="border-bottom: 2px solid #555; padding: 10px;">Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 10px;">Single 1</td>
+          <td style="padding: 10px;">100</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px;">Single 5</td>
+          <td style="padding: 10px;">50</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px;">Three 1s</td>
+          <td style="padding: 10px;">1000</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px;">Three of any other number</td>
+          <td style="padding: 10px;">Number × 100</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px;">Straight (1-6)</td>
+          <td style="padding: 10px;">1000</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px;">Three pairs</td>
+          <td style="padding: 10px;">750</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
   </div>
 
