@@ -8,20 +8,14 @@ let isPlayerStanding = false; // Track if the player has chosen to stand
 
 // Function to initialize a new game
 function startBlackjack() {
-  if (accounts[currentUser].money < 10) {
+  const betAmount = 10; // Fixed bet amount
+
+  if (accounts[currentUser].money < betAmount) {
     alert("Not enough gold to play! Minimum bet is 10 Gold.");
     return;
   }
 
-  const betInput = document.getElementById('bet-input');
-  betAmount = parseInt(betInput.value);
-
-  if (isNaN(betAmount) || betAmount < 10 || betAmount > accounts[currentUser].money) {
-    alert("Invalid bet amount. Please try again.");
-    return;
-  }
-
-  accounts[currentUser].money -= betAmount; // Deduct the bet amount
+  accounts[currentUser].money -= betAmount; // Deduct the fixed bet amount
   updateBalanceDisplay();
 
   playerHand = [];
