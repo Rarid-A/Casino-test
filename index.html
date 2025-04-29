@@ -17,6 +17,7 @@
       <button class="tablink active" onclick="openTab(event, 'slots')">Slots</button>
       <button class="tablink" onclick="openTab(event, 'roulette')">Roulette</button>
       <button class="tablink" onclick="openTab(event, 'blackjack')">Blackjack</button>
+      <button class="tablink" onclick="openTab(event, 'farkle')">Farkle</button>
     </div>
 
     <p id="balance" style="text-align: center; font-size: 18px;">Balance: 0 Gold</p>
@@ -86,6 +87,25 @@
       </div>
       <div id="blackjack-table"></div>
       <div id="blackjack-result"></div>
+    </div>
+
+    <div id="farkle" class="tabcontent" style="display:none;">
+      <h2>Farkle Game</h2>
+      <p>Roll the dice and try your luck!</p>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div style="flex: 1; text-align: center;">
+          <div id="dice-area" style="text-align: center; margin-bottom: 20px;">
+            <!-- Dice will be displayed here -->
+          </div>
+          <div style="text-align: center; margin-bottom: 20px;">
+            <button onclick="rollDice()">Roll</button>
+            <button onclick="cashOut()">Cash Out</button>
+          </div>
+          <p id="farkle-score" style="text-align: center; font-size: 18px;">Score: 0</p>
+          <p id="farkle-rolls" style="text-align: center; font-size: 18px;">Rolls Left: 3</p>
+          <p id="farkle-total" style="text-align: center; font-size: 18px;">Total Points: 0</p>
+        </div>
+      </div>
     </div>
 
   </div>

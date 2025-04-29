@@ -181,6 +181,26 @@ header {
   margin-top: 20px;
 }
 
+.dice {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 2px solid black;
+  margin: 5px;
+  cursor: pointer;
+  user-select: none;
+  color: black; /* Default text color */
+  background-color: white; /* Default background color for unkept dice */
+}
+
+.dice.kept {
+  background-color: red; /* Background color for kept dice */
+}
+
 
 
 
