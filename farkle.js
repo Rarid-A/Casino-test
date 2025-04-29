@@ -199,10 +199,10 @@
     const keys = Object.keys(counts).map(Number);
 
     // Straight
-    if (keys.length === 6) return 1500;
+    if (keys.length === 6) return 1000;
 
     // Three Pairs
-    if (values.filter(v => v === 2).length === 3) return 1500;
+    if (values.filter(v => v === 2).length === 3) return 750;
 
     let score = 0;
 
