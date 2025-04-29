@@ -17,6 +17,7 @@
       <button class="tablink active" onclick="openTab(event, 'slots')">Slots</button>
       <button class="tablink" onclick="openTab(event, 'roulette')">Roulette</button>
       <button class="tablink" onclick="openTab(event, 'blackjack')">Blackjack</button>
+      <button class="tablink" onclick="openTab(event, 'farkle')">Farkle</button>
     </div>
 
     <p id="balance" style="text-align: center; font-size: 18px;">Balance: 0 Gold</p>
@@ -78,14 +79,31 @@
 
     <div id="blackjack" class="tabcontent" style="display:none;">
       <h2>Blackjack Game</h2>
-      <p>Try your luck at Blackjack!</p>
       <div id="bet-section">
-        <label for="bet-input">Enter your bet (minimum 10 Gold):</label>
-        <input type="number" id="bet-input" min="10" step="1" value="10">
         <button onclick="startBlackjack()">Start Game</button>
       </div>
       <div id="blackjack-table"></div>
       <div id="blackjack-result"></div>
+    </div>
+
+  </div>
+
+    <div id="farkle" class="tabcontent" style="display:none;">
+        <div id="game-info">
+          <p>Round: <span id="round">0</span> / 3</p>
+          <p>Round Score: <span id="round-score">0</span></p>
+          <p>Total Score: <span id="total-score">0</span></p>
+        </div>
+        <div id="dice-area">
+          <!-- Dice will be dynamically generated here -->
+        </div>
+        <div id="game-controls">
+          <button id="new-game">New Game</button>
+          <button id="roll-dice" disabled>Roll Dice</button>
+          <button id="cash-out" disabled>Cash Out</button>
+        </div>
+        <p id="message"></p>
+      </div>
     </div>
 
   </div>

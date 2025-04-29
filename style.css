@@ -181,6 +181,69 @@ header {
   margin-top: 20px;
 }
 
+#game-info p {
+  margin: 10px 0;
+}
+
+#dice-area {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.dice {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  margin: 5px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dice.selected {
+  background-color: #e63946;
+  border-color: #e63946;
+}
+
+.dice.used {
+  opacity: 0.5;
+  border: 2px dashed gray;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #555;
+  color: #fff;
+  font-size: 16px;
+}
+
+button:disabled {
+  background-color: #333;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #777;
+}
+
+#message {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #e63946;
+}
+
 
 
 
