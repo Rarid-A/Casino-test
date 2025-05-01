@@ -59,15 +59,20 @@
   }
 
   function rollDice() {
-    if (selectedDiceIndices.length > 0) {
-      const selectedValues = selectedDiceIndices.map(i => currentDice[i]);
-      const score = calculateScore(selectedValues);
-      if (score === 0) {
-        messageDisplay.textContent = "Invalid dice selection!";
+    if (selectedDiceIndices.length === 0 && usedDice.length !== 0) {
+        messageDisplay.textContent = "You must select at least one scoring die before rolling!";
         return;
-      }
-      roundScore += score;
-      usedDice.push(...selectedDiceIndices.map(i => currentDice[i]));
+    }
+
+    if (selectedDiceIndices.length > 0) {
+        const selectedValues = selectedDiceIndices.map(i => currentDice[i]);
+        const score = calculateScore(selectedValues);
+        if (score === 0) {
+            messageDisplay.textContent = "Invalid dice selection!";
+            return;
+        }
+        roundScore += score;
+        usedDice.push(...selectedDiceIndices.map(i => currentDice[i]));
     }
 
     const diceToRoll = usedDice.length === 6 || usedDice.length === 0 ? 6 : 6 - usedDice.length;
@@ -76,13 +81,14 @@
     renderDice();
     const valid = getScoringIndices(currentDice);
     if (valid.length === 0) {
-      messageDisplay.textContent = "Farkle! No scoring dice.";
-      rollDiceButton.disabled = true;
-      cashOutButton.disabled = true;
-      return;
+        messageDisplay.textContent = "Farkle! No scoring dice.";
+        rollDiceButton.disabled = true;
+        cashOutButton.disabled = true;
+        return;
     }
 
     messageDisplay.textContent = "Select scoring dice to continue or cash out.";
+    rollDiceButton.disabled = true; // Lock the roll button until a new die is selected
     cashOutButton.disabled = roundScore < 300;
   }
 
@@ -119,9 +125,9 @@
 
   function toggleDiceSelection(index) {
     if (selectedDiceIndices.includes(index)) {
-      selectedDiceIndices = selectedDiceIndices.filter(i => i !== index);
+        selectedDiceIndices = selectedDiceIndices.filter(i => i !== index);
     } else {
-      selectedDiceIndices.push(index);
+        selectedDiceIndices.push(index);
     }
 
     const selectedValues = selectedDiceIndices.map(i => currentDice[i]);
@@ -134,11 +140,11 @@
     // Enable or disable the cash-out button based on the score
     cashOutButton.disabled = roundScore < 300;
 
-    // Enable or disable the roll button based on dice selection
+    // Enable the roll button if at least one die is selected
     rollDiceButton.disabled = selectedDiceIndices.length === 0;
 
     renderDice();
-  }
+}
 
   function cashOut() {
     if (roundScore < 300) {
