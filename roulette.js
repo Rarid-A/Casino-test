@@ -5,59 +5,74 @@ function initializeRoulette() {
 // Generate the roulette board
 function createRouletteBoard() {
     const board = document.getElementById('roulette-board');
+    board.style.display = 'grid';
+    board.style.gridTemplateColumns = 'repeat(13, 50px)'; // 13 columns
+    board.style.gridGap = '2px';
+    board.style.justifyContent = 'center';
+
     const numbers = [
-      { number: 0, color: 'green' },
-      { number: 1, color: 'red' },
-      { number: 2, color: 'black' },
-      { number: 3, color: 'red' },
-      { number: 4, color: 'black' },
-      { number: 5, color: 'red' },
-      { number: 6, color: 'black' },
-      { number: 7, color: 'red' },
-      { number: 8, color: 'black' },
-      { number: 9, color: 'red' },
-      { number: 10, color: 'black' },
-      { number: 11, color: 'black' },
-      { number: 12, color: 'red' },
-      { number: 13, color: 'black' },
-      { number: 14, color: 'red' },
-      { number: 15, color: 'black' },
-      { number: 16, color: 'red' },
-      { number: 17, color: 'black' },
-      { number: 18, color: 'red' },
-      { number: 19, color: 'red' },
-      { number: 20, color: 'black' },
-      { number: 21, color: 'red' },
-      { number: 22, color: 'black' },
-      { number: 23, color: 'red' },
-      { number: 24, color: 'black' },
-      { number: 25, color: 'red' },
-      { number: 26, color: 'black' },
-      { number: 27, color: 'red' },
-      { number: 28, color: 'black' },
-      { number: 29, color: 'black' },
-      { number: 30, color: 'red' },
-      { number: 31, color: 'black' },
-      { number: 32, color: 'red' },
-      { number: 33, color: 'black' },
-      { number: 34, color: 'red' },
+        { number: 0, color: 'green' },
+        { number: 1, color: 'red' },
+        { number: 2, color: 'black' },
+        { number: 3, color: 'red' },
+        { number: 4, color: 'black' },
+        { number: 5, color: 'red' },
+        { number: 6, color: 'black' },
+        { number: 7, color: 'red' },
+        { number: 8, color: 'black' },
+        { number: 9, color: 'red' },
+        { number: 10, color: 'black' },
+        { number: 11, color: 'black' },
+        { number: 12, color: 'red' },
+        { number: 13, color: 'black' },
+        { number: 14, color: 'red' },
+        { number: 15, color: 'black' },
+        { number: 16, color: 'red' },
+        { number: 17, color: 'black' },
+        { number: 18, color: 'red' },
+        { number: 19, color: 'red' },
+        { number: 20, color: 'black' },
+        { number: 21, color: 'red' },
+        { number: 22, color: 'black' },
+        { number: 23, color: 'red' },
+        { number: 24, color: 'black' },
+        { number: 25, color: 'red' },
+        { number: 26, color: 'black' },
+        { number: 27, color: 'red' },
+        { number: 28, color: 'black' },
+        { number: 29, color: 'black' },
+        { number: 30, color: 'red' },
+        { number: 31, color: 'black' },
+        { number: 32, color: 'red' },
+        { number: 33, color: 'black' },
+        { number: 34, color: 'red' },
+        { number: 35, color: 'black' },
+        { number: 36, color: 'red' },
     ];
-  
-    numbers.forEach((item) => {
-      const cell = document.createElement('div');
-      cell.textContent = item.number;
-      cell.style.width = '50px';
-      cell.style.height = '50px';
-      cell.style.display = 'flex';
-      cell.style.alignItems = 'center';
-      cell.style.justifyContent = 'center';
-      cell.style.backgroundColor = item.color;
-      cell.style.color = 'white';
-      cell.style.margin = '2px';
-      cell.style.borderRadius = '5px';
-      board.appendChild(cell);
+
+    numbers.forEach((item, index) => {
+        const cell = document.createElement('div');
+        cell.textContent = item.number;
+        cell.style.width = '50px';
+        cell.style.height = '50px';
+        cell.style.display = 'flex';
+        cell.style.alignItems = 'center';
+        cell.style.justifyContent = 'center';
+        cell.style.backgroundColor = item.color;
+        cell.style.color = 'white';
+        cell.style.margin = '0';
+        cell.style.borderRadius = '5px';
+
+        if (index === 0) {
+            // Make 0 span the first column
+            cell.style.gridColumn = '1 / 2';
+            cell.style.gridRow = '1 / span 3'; // Span 3 rows to align vertically
+            cell.style.height = 'auto'; // Adjust height to span rows
+        }
+
+        board.appendChild(cell);
     });
-  }
+}
   
   // Handle roulette spin
   function placeRouletteBet(event) {
@@ -74,7 +89,7 @@ function createRouletteBoard() {
     accounts[currentUser].money -= 10; // Deduct bet amount
     updateBalanceDisplay();
   
-    const spinResult = Math.floor(Math.random() * 35); // Random number between 0 and 34
+    const spinResult = Math.floor(Math.random() * 35); // Random number between 0 and 36
     const colors = [
       'green',
       'red',
@@ -105,6 +120,8 @@ function createRouletteBoard() {
       'black',
       'red',
       'black',
+      'black',
+      'red',
       'black',
       'red',
       'black',

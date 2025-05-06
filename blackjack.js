@@ -194,7 +194,7 @@ function endGame(message, playerWins = false) {
   result.textContent = message;
 
   if (playerWins) {
-    const winnings = betAmount * 2; // Player wins double their bet
+    const winnings = 20; // Fixed winnings amount
     accounts[currentUser].money += winnings;
     updateBalanceDisplay();
     result.textContent += ` You win ${winnings} Gold!`;
