@@ -1,6 +1,6 @@
 function initializeRoulette() {
     console.log("Roulette tab initialized");
-  }
+}
 
 // Generate the roulette board
 function createRouletteBoard() {
@@ -73,66 +73,78 @@ function createRouletteBoard() {
         board.appendChild(cell);
     });
 }
-  
-  // Handle roulette spin
-  function placeRouletteBet(event) {
+
+let isSpinning = false; // Flag to track if a spin is in progress
+
+// Handle roulette spin
+function placeRouletteBet(event) {
     event.preventDefault();
-  
+
+    if (isSpinning) {
+        return; // Do nothing if a spin is already in progress
+    }
+
+    const spinButton = document.getElementById('spin-button'); // Assuming the button has this ID
+    spinButton.disabled = true; // Disable the button
+    isSpinning = true; // Lock the spin process
+
     const betType = document.getElementById('bet-type').value;
     const resultElement = document.getElementById('roulette-result');
-  
+
     if (accounts[currentUser].money < 10) {
-      resultElement.textContent = 'Not enough gold to place a bet!';
-      return;
+        resultElement.textContent = 'Not enough gold to place a bet!';
+        spinButton.disabled = false; // Re-enable the button
+        isSpinning = false; // Unlock the spin process
+        return;
     }
-  
+
     accounts[currentUser].money -= 10; // Deduct bet amount
     updateBalanceDisplay();
-  
+
     const spinResult = Math.floor(Math.random() * 35); // Random number between 0 and 36
     const colors = [
-      'green',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
-      'black',
-      'red',
+        'green',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
+        'black',
+        'red',
     ];
-  
+
     const spinColor = colors[spinResult];
     let winnings = 0;
-  
+
     // Add animation
     const board = document.getElementById('roulette-board');
     const cells = board.children;
@@ -145,47 +157,49 @@ function createRouletteBoard() {
 
     // Clear all previous highlights
     Array.from(cells).forEach((cell) => {
-      cell.style.border = 'none';
+        cell.style.border = 'none';
     });
 
     const interval = setInterval(() => {
-      // Remove highlight from the previous cell
-      if (currentIndex > 0) {
-        cells[(currentIndex - 1) % cells.length].style.border = 'none';
-      } else {
-        cells[cells.length - 1].style.border = 'none';
-      }
-
-      // Highlight the current cell
-      cells[currentIndex % cells.length].style.border = '2px solid yellow';
-
-      currentIndex++;
-
-      // Stop the animation when it reaches the final index
-      if (currentIndex === finalIndex) {
-        clearInterval(interval);
-
-        // Clear all highlights again to ensure no lingering borders
-        Array.from(cells).forEach((cell) => {
-          cell.style.border = 'none';
-        });
-
-        // Highlight the final result
-        cells[spinResult].style.border = '4px solid gold';
-
-        // Determine winnings
-        if (betType === spinColor) {
-          winnings = betType === 'green' ? 140 : 20; // Green pays 14:1, others pay 2:1
-          accounts[currentUser].money += winnings;
-          resultElement.textContent = `🎉 The ball landed on ${spinResult} (${spinColor}). You win ${winnings} Gold! 🎉`;
+        // Remove highlight from the previous cell
+        if (currentIndex > 0) {
+            cells[(currentIndex - 1) % cells.length].style.border = 'none';
         } else {
-          resultElement.textContent = `The ball landed on ${spinResult} (${spinColor}). You lose!`;
+            cells[cells.length - 1].style.border = 'none';
         }
 
-        updateBalanceDisplay();
-      }
+        // Highlight the current cell
+        cells[currentIndex % cells.length].style.border = '2px solid yellow';
+
+        currentIndex++;
+
+        // Stop the animation when it reaches the final index
+        if (currentIndex === finalIndex) {
+            clearInterval(interval);
+
+            // Clear all highlights again to ensure no lingering borders
+            Array.from(cells).forEach((cell) => {
+                cell.style.border = 'none';
+            });
+
+            // Highlight the final result
+            cells[spinResult].style.border = '4px solid gold';
+
+            // Determine winnings
+            if (betType === spinColor) {
+                winnings = betType === 'green' ? 140 : 20; // Green pays 14:1, others pay 2:1
+                accounts[currentUser].money += winnings;
+                resultElement.textContent = `🎉 The ball landed on ${spinResult} (${spinColor}). You win ${winnings} Gold! 🎉`;
+            } else {
+                resultElement.textContent = `The ball landed on ${spinResult} (${spinColor}). You lose!`;
+            }
+
+            updateBalanceDisplay();
+            isSpinning = false; // Unlock the spin process
+            spinButton.disabled = false; // Re-enable the button
+        }
     }, intervalTime);
-  }
-  
-  // Initialize the roulette board on page load
-  document.addEventListener('DOMContentLoaded', createRouletteBoard);
+}
+
+// Initialize the roulette board on page load
+document.addEventListener('DOMContentLoaded', createRouletteBoard);
