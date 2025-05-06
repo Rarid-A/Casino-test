@@ -50,13 +50,16 @@
           <td>1000 Gold</td>
         </tr>
       </table>
-      <div id="slot-machine">
+      <div id="slot-machine" style="text-align: center; margin-top: 10px; position: relative;">
+
         <div class="reel" id="reel1">🍒</div>
         <div class="reel" id="reel2">🍒</div>
         <div class="reel" id="reel3">🍒</div>
       </div>
-      <button onclick="spinSlots()">Spin</button>
-      <p id="slot-result"></p>
+      <div style="text-align: center; margin-top: 10px;">
+        <button id="spin-button" onclick="spinSlots()">Spin</button>
+      </div>
+      <p id="slot-result" style="text-align: center;"></p>
     </div>
 
     <div id="roulette" class="tabcontent">
